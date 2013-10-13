@@ -106,18 +106,73 @@ function ellipse(x, y, xr, yr){
 	}
 }
 
+function path(p1, p2){
+
+	this.points = new Array();
+	this.i = 0;
+
+	this.buildPath = buildPath;
+	this.closePath = closePath;
+	this.fillColor = fillColor;
+	this.joinTo = joinTo;
+	this.strokeColor = strokeColor;
+	this.strokeWidth = strokeWidth;
+
+	this.points[this.i] = p1; this.i++;
+	this.points[this.i] = p2; this.i++;
+
+	this.obj = document.createElementNS(svgns, 'path');
+	this.buildPath();
+
+	return this;
+
+	function buildPath(){
+		var path = 'M ' + this.points[0].x + ' ' + this.points[0].y + ' ';
+		for(var j=1;j<this.i;j++){
+			path += 'L ' + this.points[j].x + ' ' + this.points[j].y + ' ';
+		}
+		this.obj.setAttribute('d', path);
+	}
+
+	function closePath(){
+		var path = this.obj.getAttribute('d');
+		path += ' z';
+		this.obj.setAttribute('d', path);
+	}
+
+	function fillColor(color){
+		this.obj.setAttribute('fill', color);
+		return this;
+	}
+
+	function joinTo(point){
+		this.points[this.i] = point; this.i++;
+		this.buildPath();
+		return this;
+	}
+
+	function strokeColor(color){
+		this.obj.setAttribute('stroke', color);
+		return this;
+	}
+
+	function strokeWidth(width){
+		this.obj.setAttribute('stroke-width', width);
+		return this;
+	}
+
+}
+
 function line(start, end){
 
-	this.x1 = start.x;
-	this.y1 = start.y;
-	this.x2 = end.x;
-	this.y2 = end.y;
+	this.p1 = start;
+	this.p2 = end;
 
 	this.strokeColor = strokeColor;
 	this.strokeWidth = strokeWidth;
 
 	this.obj = document.createElementNS(svgns, 'path');
-	var path = 'M ' + this.x1 + ' ' + this.y1 + ' L ' + this.x2 + ' ' + this.y2;
+	var path = 'M ' + this.p1.x + ' ' + this.p1.y + ' L ' + this.p2.x + ' ' + this.p2.y;
 	this.obj.setAttribute('d', path);
 
 	return this;
@@ -135,9 +190,18 @@ function line(start, end){
 }
 
 function point(x, y){
+
 	this.x = x;
 	this.y = y;
+
+	this.joinTo = joinTo;
+
 	return this;
+
+	function joinTo(point){
+		return new path(this, point);
+	}
+
 }
 
 function rect(x, y, width, height){

@@ -33,6 +33,7 @@ function svg(width, height, container){
 	// objects
 	function add(element){
 		this.canvas.appendChild(element.obj);
+		return this;
 	}
 }
 
@@ -245,4 +246,37 @@ function rect(x, y, width, height){
 		return this;
 	}
 
+}
+
+function text(x, y, string){
+
+	this.x = x;
+	this.y = y;
+	this.text = string;
+
+	this.fontColor = fontColor;
+	this.fontSize = fontSize;
+	this.fontFamily = fontFamily;
+
+	this.obj = document.createElementNS(svgns, 'text');
+	this.obj.setAttribute('x', x);
+	this.obj.setAttribute('y', y);
+	this.obj.textContent = this.text;
+
+	return this;
+
+	function fontColor(color){
+		this.obj.setAttribute('fill', color);
+		return this;
+	}
+
+	function fontSize(size){
+		this.obj.setAttribute('font-size', size);
+		return this;
+	}
+
+	function fontFamily(family){
+		this.obj.setAttribute('font-family', family);
+		return this;
+	}
 }

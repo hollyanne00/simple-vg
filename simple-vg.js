@@ -48,8 +48,8 @@ function circle(x, y, radius){
 	this.strokeWidth = strokeWidth;
 
 	this.obj = document.createElementNS(svgns, 'circle');
-	this.obj.setAttribute('cx', (x+radius));
-	this.obj.setAttribute('cy', (y+radius));
+	this.obj.setAttribute('cx', (x));
+	this.obj.setAttribute('cy', (y));
 	this.obj.setAttribute('r', radius);
 
 	return this;
